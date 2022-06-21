@@ -11,8 +11,11 @@ selectorHeader[0].addEventListener('click', function(){
   operationsCredit.forEach(function(el) {
     el.removeAttribute('style');
   });
-});
 
+    // display amount 
+    displaySolde =  parseFloat(datapoints[datapoints.length-1]).toFixed(2);
+    soldeH1.innerHTML = `${displaySolde}€`;
+});
 // listener for display all credits
 selectorHeader[1].addEventListener('click', function(){
   selectorHeader[1].classList.add("active");
@@ -25,8 +28,11 @@ selectorHeader[1].addEventListener('click', function(){
   operationsCredit.forEach(function(el) {
     el.removeAttribute('style');
   });
-});
 
+    // display amount 
+    displaySolde = parseFloat(datapointsCredit[datapointsCredit.length-1]).toFixed(2);
+    soldeH1.innerHTML = `${displaySolde}€`;
+});
 // listener for display all debits
 selectorHeader[2].addEventListener('click', function(){
   selectorHeader[2].classList.add("active");
@@ -39,7 +45,34 @@ selectorHeader[2].addEventListener('click', function(){
   operationsDebit.forEach(function(el) {
     el.removeAttribute('style');
   });
+
+    // display amount 
+    displaySolde = parseFloat(datapointsDebit[datapointsDebit.length-1]).toFixed(2);
+    soldeH1.innerHTML = `${displaySolde}€`;
 });
+}
+
+// update amount solde
+function updateSolde(){
+    if (selectorHeader[0].classList.contains("active")){
+        displaySolde =  parseFloat(datapoints[datapoints.length-1]).toFixed(2);
+        soldeH1.innerHTML = `${displaySolde}€`;
+    } else if (selectorHeader[1].classList.contains("active")){
+        displaySolde = parseFloat(datapointsCredit[datapointsCredit.length-1]).toFixed(2);
+        soldeH1.innerHTML = `${displaySolde}€`;
+    } else if (selectorHeader[2].classList.contains("active")){
+        displaySolde = parseFloat(datapointsDebit[datapointsDebit.length-1]).toFixed(2);
+        soldeH1.innerHTML = `${displaySolde}€`;
+    }
+}
+
+// close modal
+function closeModal(){
+    const modal = document.querySelector(".reveal-overlay");
+    const html = document.querySelector('html');
+    modal.style.display = "none";
+    html.classList.remove("zf-has-scroll", "is-reveal-open");
+    html.removeAttribute('style');
 }
 
 // Create block for new operation
@@ -69,8 +102,10 @@ function newOperation(){
   p.setAttribute("class", 'count');
   p.innerHTML = (amount.value + '€');// contenu de l'input amount
   const small2 = document.createElement('small');
-  small2.innerHTML = (amount.value + '%');// calcul du pourcentage du montant compéarer au montant global
-
+  // calcul percent
+  let getpercent = ((100 * parseFloat(amount.value) / parseFloat(datapoints[datapoints.length-1]))).toFixed(2);
+  // display percent
+  small2.innerHTML = (getpercent + '%');// calcul du pourcentage du montant compéarer au montant global
 
  //detect value about select
     if (select.value == "--"){
@@ -112,4 +147,70 @@ function resetValueForm(){
     valueInputs.forEach(function(elem) {
       elem.value = '';
   });
+}
+
+// add new value in respective array  
+function addAmountInArray(){
+      if (select.value == 'debit'){
+    let calcul = datapoints[datapoints.length-1] - amount.value;
+    datapoints.push(calcul);
+    console.log(datapoints);
+    const calculDebit =  parseFloat(datapointsDebit[datapointsDebit.length-1]) + parseFloat(amount.value);
+    datapointsDebit.push(calculDebit);
+    console.log(datapointsDebit);
+  } else if (select.value == 'credit'){
+    let calcul = parseFloat(datapoints[datapoints.length-1]) + parseFloat(amount.value);
+    datapoints.push(calcul);
+    console.log(datapoints);
+    const calculcredit =  parseFloat(datapointsCredit[datapointsCredit.length-1]) + parseFloat(amount.value);
+    datapointsCredit.push(calculcredit);
+    console.log(datapointsCredit);
+  }
+}
+
+// switch graph 
+function switchGraph(){
+    const selectorHeader = document.querySelectorAll('.navHeader a');
+    selectorHeader[0].addEventListener('click', function(){
+        data = {
+        labels: labels,
+        datasets: [
+            {
+            label: "Compte",
+            data: datapoints,
+            borderColor: "purple",
+            //   fill: true,
+            cubicInterpolationMode: "monotone",
+            },
+        ],
+        };
+    });
+    selectorHeader[1].addEventListener('click', function(){
+        data = {
+        labels: labels,
+        datasets: [
+            {
+            label: "Compte",
+            data: datapointsCredit,
+            borderColor: "green",
+            //   fill: true,
+            cubicInterpolationMode: "monotone",
+            },
+        ],
+        };
+    });
+    selectorHeader[2].addEventListener('click', function(){
+        data = {
+        labels: labels,
+        datasets: [
+            {
+            label: "Compte",
+            data: datapointsDebit,
+            borderColor: "red",
+            //   fill: true,
+            cubicInterpolationMode: "monotone",
+            },
+        ],
+        };
+    });
 }

@@ -12,7 +12,7 @@ const data = {
   datasets: [
     {
       label: "Compte",
-      data: datapointsDebit,
+      data: datapoints,
       borderColor: "purple",
       //   fill: true,
       cubicInterpolationMode: "monotone",

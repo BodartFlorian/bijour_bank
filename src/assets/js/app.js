@@ -16,6 +16,8 @@ const select = document.querySelector('#operator');
 const title = document.querySelector('#titre');
 const desc = document.querySelector('#desc');
 const amount = document.querySelector('#montant');
+const soldeH1 = document.querySelector('#solde');
+let displaySolde = '';
 
 
 // listener for display specific operations
@@ -27,34 +29,16 @@ submit.addEventListener('submit', function(event){
   event.preventDefault();
   
   // close modal 
-  const modal = document.querySelector(".reveal-overlay");
-  const html = document.querySelector('html');
-  modal.style.display = "none";
-  html.classList.remove("zf-has-scroll", "is-reveal-open");
-  html.removeAttribute('style');
+  closeModal();
 
   // get form value & insert into html
   newOperation();
 
-
   // calcul last amount with new amount for graph 
-  if (select.value == 'debit'){
-    let calcul = datapoints[datapoints.length-1] - amount.value;
-    datapoints.push(calcul);
-    console.log(datapoints);
-    console.log('debit');
-    // const calculDebit = datapointsDebit[datapointsDebit.length-1] + amount.value;
-    // datapointsDebit.push(calculDebit);
-    // console.log(datapointsDebit);
-  } else if (select.value == 'credit'){
-    let calcul = datapoints[datapoints.length-1] + amount.value;
-    datapoints.push(calcul);
-    console.log(datapoints);
-        console.log('credit');
-    // const calculcredit = datapointsCredit[datapointsCredit.length-1] + amount.value;
-    // datapointsCredit.push(calculcredit);
-    // console.log(datapointsCredit);
-  }
+  addAmountInArray();
+
+  // update solde value 
+  updateSolde();
 
   // update debit / credit 
   updateOperation();
