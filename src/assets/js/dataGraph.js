@@ -1,7 +1,5 @@
 // <block:setup:1>
-const datapoints = [1200, 750, 775, 760, 2560]; // push new all amont here
-const datapointsCredit = [1200, 1225, 3025]; // push new credit amont here
-  const datapointsDebit = [450, 465];  // debit amount here
+const datapoints = [1200, 750, 775, 760, 2560];
 const DATA_COUNT = datapoints.length + 2;
 const labels = [];
 for (let i = 0; i < DATA_COUNT; ++i) {
@@ -74,4 +72,3 @@ function addTemperature(time, temperature) {
   /* Rafraichir le graphique */
   chart.update();
 }
-
