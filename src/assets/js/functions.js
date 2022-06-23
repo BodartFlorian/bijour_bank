@@ -21,7 +21,7 @@ selectorHeader[2].addEventListener('click', function(){
 }
 
 // update amount solde
-function updateSolde(){
+function update(){
     if (selectorHeader[0].classList.contains("active")){
         render(operations);
     } else if (selectorHeader[1].classList.contains("active")){
@@ -57,4 +57,78 @@ function resetValueForm(){
 function filter(type){
   const filter = operations.filter(operation => operation.type === type);
   render(filter);
+}
+
+// render operations
+function render(array){
+  // reset div
+  divParent.innerHTML = "";
+  let i = 0;
+  let tampon = 0; 
+  datapoints = [];
+  let calculPercent = (100).toFixed(2);
+  array.forEach((operation) => {
+
+    // check type for img src 
+    let src = '';
+    let alt = '';
+    if (operation.type === "debit"){
+      src = "./assets/images/depenses.png";
+      alt = "debit";
+    }
+    if (operation.type === "credit"){
+      src = "./assets/images/sac-dargent.png";
+      alt = "credit";
+    }
+    
+    // calcul percent 
+    if (i < 1){
+      calculPercent = (100).toFixed(2);
+      i++;
+    }
+    else {
+      calculPercent =  ((100 * parseFloat(operation.amount) / parseFloat(tampon))).toFixed(2);
+    }
+
+    // calcul total amount 
+    if (operation.type === "credit"){
+    tampon = parseFloat(tampon) + parseFloat(operation.amount);
+    }
+    if (operation.type === "debit"){
+    tampon = parseFloat(tampon) - parseFloat(operation.amount);
+    } 
+
+    // display total amount
+    soldeH1.innerHTML = `${tampon}€`;
+
+    // push amount in datapoints for graph
+    datapoints.push(tampon);
+
+    // make template 
+    const template = `
+    <div class="operation ${operation.type}">
+      <div class="grid-x grid-padding-x align-middle">
+        <div class="cell shrink">
+          <div class="picto">
+            <img src=${src} alt=${alt}/>
+          </div>
+        </div>
+        <div class="cell auto">
+          <div>
+            <h2>${operation.title}</h2>
+            <small>${operation.desc}</small>
+          </div>
+        </div>
+        <div class="cell small-3 text-right">
+          <div>
+            <p class="count">${operation.amount}€</p>
+            <small>${calculPercent}%</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    `
+    divParent.innerHTML += template;
+  });
+  return datapoints;
 }
