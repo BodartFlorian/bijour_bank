@@ -19,6 +19,7 @@ const amount = document.querySelector('#montant');
 const soldeH1 = document.querySelector('#solde');
 let displaySolde = '';
 let datapoints = [];
+let labels = [];
 
 
 // storage operations
@@ -87,3 +88,5 @@ submit.addEventListener('submit', function(event){
   // reset value form
   resetValueForm();
 });
+
+console.log(datapoints);

@@ -66,6 +66,7 @@ function render(array){
   let i = 0;
   let tampon = 0; 
   datapoints = [];
+  labels = [];
   let calculPercent = (100).toFixed(2);
   array.forEach((operation) => {
 
@@ -99,10 +100,12 @@ function render(array){
     } 
 
     // display total amount
-    soldeH1.innerHTML = `${tampon}€`;
+    let splitTampon = numStr(tampon);
+    soldeH1.innerHTML = `${splitTampon}€`;
 
     // push amount in datapoints for graph
     datapoints.push(tampon);
+    labels.push(operation.title);
 
     // make template 
     const template = `
@@ -131,4 +134,20 @@ function render(array){
     divParent.innerHTML += template;
   });
   return datapoints;
+}
+
+// split every thousand
+function numStr(a, b) {
+  a = '' + a;
+  b = b || ' ';
+  var c = '',
+      d = 0;
+  while (a.match(/^0[0-9]/)) {
+    a = a.substr(1);
+  }
+  for (var i = a.length-1; i >= 0; i--) {
+    c = (d != 0 && d % 3 == 0) ? a[i] + b + c : a[i] + c;
+    d++;
+  }
+  return c;
 }

@@ -1,7 +1,6 @@
 function loadGraph(){
     // <block:setup:1>
   const DATA_COUNT = datapoints.length + 2;
-  const labels = [];
   for (let i = 0; i < DATA_COUNT; ++i) {
     labels.push(i.toString());
   }
